@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dionízia 51 · Confirme sua presença</title>
+  <meta name="description" content="Confirme sua presença no aniversário de 51 anos da Dionízia Queiroz — 21 de novembro, 19h." />
+  <meta name="theme-color" content="#F5C842" />
+  <!-- Pede aos buscadores (Google etc.) para não listar esta página nos resultados -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Fontes: script (nome), serifada (títulos) e leitura (corpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Playfair+Display:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind via CDN (apenas para visualização/protótipo rápido) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sol:   '#F5C842',  // amarelo do convite
+            rubi:  '#D62F3F',  // fita vermelha
+            vinho: '#5A0F1C',  // texto / ícones
+            ouro:  '#C79A3B',  // anel dourado
+            creme: '#FFFBF0',  // fundo claro
+            grafite: '#1E1E20' // medalhão "51"
+          },
+          fontFamily: {
+            script: ['"Kaushan Script"', 'cursive'],
+            serif:  ['"Playfair Display"', 'serif'],
+            body:   ['Lora', 'serif'],
+          },
+          keyframes: {
+            floaty: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
+            rise:   { '0%': { opacity: 0, transform: 'translateY(18px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+          },
+          animation: {
+            floaty: 'floaty 4s ease-in-out infinite',
+            rise: 'rise .8s ease-out both',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Lora, serif; background: #FFFBF0; color: #5A0F1C; }
+
+    /* Textura sutil de bambu/cana no fundo claro (pontilhado leve) */
+    .paper {
+      background-image:
+        radial-gradient(rgba(90,15,28,.05) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* Borda tracejada estilo cartão do convite */
+    .stitch { border: 2px dashed rgba(90,15,28,.55); }
+
+    /* Cards de presença (radio estilizado) */
+    .choice input:checked + .choice-body {
+      border-color: #5A0F1C;
+      background: #5A0F1C;
+      color: #FFFBF0;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px -10px rgba(90,15,28,.6);
+    }
+    .choice input:focus-visible + .choice-body { outline: 3px solid #D62F3F; outline-offset: 2px; }
+
+    /* Campo com foco elegante */
+    .field {
+      width: 100%;
+      background: #fff;
+      border: 1.5px solid rgba(90,15,28,.25);
+      border-radius: .9rem;
+      padding: .85rem 1rem;
+      color: #5A0F1C;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field::placeholder { color: rgba(90,15,28,.4); }
+    .field:focus { outline: none; border-color: #D62F3F; box-shadow: 0 0 0 4px rgba(214,47,63,.15); }
+    .field.invalid { border-color: #D62F3F; background: #fff5f5; }
+
+    /* Checkmark desenhado no sucesso */
+    .check-circle { stroke-dasharray: 166; stroke-dashoffset: 166; animation: draw .7s .1s ease-out forwards; }
+    .check-mark   { stroke-dasharray: 48;  stroke-dashoffset: 48;  animation: draw .45s .7s ease-out forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    /* Botão com brilho ao passar o mouse */
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+      content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+      transform: skewX(-20deg); transition: left .6s;
+    }
+    .btn-shine:hover::after { left: 140%; }
+
+    #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <!-- ═════════════ 1. CABEÇALHO (HERO) ═════════════ -->
+  <header class="relative bg-sol overflow-hidden">
+    <!-- Ornamentos dos cantos -->
+    <svg class="absolute left-2 top-2 w-20 sm:w-28 text-creme/80" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M8 60 C8 30 30 10 60 10 M8 40 C8 24 24 8 40 8 M14 70 C14 40 36 18 66 18"/>
+      <circle cx="18" cy="18" r="5"/><circle cx="30" cy="12" r="2.5"/><circle cx="12" cy="30" r="2.5"/>
+    </svg>
+    <svg class="absolute right-2 top-2 w-20 sm:w-28 text-creme/80 -scale-x-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M8 60 C8 30 30 10 60 10 M8 40 C8 24 24 8 40 8 M14 70 C14 40 36 18 66 18"/>
+      <circle cx="18" cy="18" r="5"/><circle cx="30" cy="12" r="2.5"/><circle cx="12" cy="30" r="2.5"/>
+    </svg>
+
+    <div class="mx-auto max-w-3xl px-6 pt-14 sm:pt-16 text-center">
+      <p class="font-serif font-semibold text-lg sm:text-2xl leading-snug text-vinho animate-rise">
+        Os bons amigos conhecem as melhores histórias.<br class="hidden sm:block" />
+        Os melhores amigos as vivem ao seu lado!
+      </p>
+
+      <h1 class="font-script text-5xl sm:text-7xl text-vinho mt-10 sm:mt-12 animate-rise" style="animation-delay:.15s">
+        Dionízia Queiroz
+      </h1>
+      <p class="mt-3 text-sm sm:text-base tracking-[.25em] uppercase text-vinho/80 animate-rise" style="animation-delay:.25s">
+        Está de aniversário — venha celebrar!
+      </p>
+    </div>
+
+    <!-- Medalhão 51 sobre faixa vermelha (tudo no fluxo normal da página, sem posicionamento absoluto sobre outros blocos) -->
+    <div class="relative mt-10 sm:mt-12 pb-10 sm:pb-12">
+      <!-- faixa vermelha atrás do medalhão -->
+      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-12 sm:h-16 bg-rubi"></div>
+      <!-- medalhão -->
+      <div class="relative z-10 flex justify-center animate-floaty">
+        <!-- ✏️ Se quiser usar uma imagem sua no lugar deste selo, troque o bloco abaixo por:
+             <img src="SUA-IMAGEM.png" alt="51 anos" class="w-32 sm:w-40 h-auto" /> -->
+        <div class="rounded-full p-2 shadow-xl" style="background:linear-gradient(145deg,#F0D98A,#C79A3B 55%,#9A6F1E)">
+          <div class="rounded-full border-4 border-rubi bg-creme w-28 h-28 sm:w-36 sm:h-36 flex flex-col items-center justify-center">
+            <span class="font-serif font-bold text-6xl sm:text-7xl text-vinho leading-none">51</span>
+            <span class="text-[10px] sm:text-xs uppercase tracking-[.3em] text-vinho/80 mt-1">anos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contagem regressiva -->
+  <section class="paper bg-creme -mt-1 pb-10 sm:pb-14" aria-labelledby="countdown-title">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <h2 id="countdown-title" class="font-serif text-xl sm:text-2xl font-semibold">Faltam apenas…</h2>
+
+      <div id="countdown" class="mt-5 grid grid-cols-4 gap-3 sm:gap-5 max-w-xl mx-auto" role="timer" aria-live="off">
+        <div class="rounded-2xl bg-white stitch py-4"><div id="cd-d" class="font-serif text-3xl sm:text-5xl font-bold">--</div><div class="text-[11px] sm:text-xs uppercase tracking-widest mt-1 text-vinho/70">dias</div></div>
+        <div class="rounded-2xl bg-white stitch py-4"><div id="cd-h" class="font-serif text-3xl sm:text-5xl font-bold">--</div><div class="text-[11px] sm:text-xs uppercase tracking-widest mt-1 text-vinho/70">horas</div></div>
+        <div class="rounded-2xl bg-white stitch py-4"><div id="cd-m" class="font-serif text-3xl sm:text-5xl font-bold">--</div><div class="text-[11px] sm:text-xs uppercase tracking-widest mt-1 text-vinho/70">min</div></div>
+        <div class="rounded-2xl bg-white stitch py-4"><div id="cd-s" class="font-serif text-3xl sm:text-5xl font-bold">--</div><div class="text-[11px] sm:text-xs uppercase tracking-widest mt-1 text-vinho/70">seg</div></div>
+      </div>
+      <p id="cd-done" class="hidden font-script text-3xl mt-4"></p>
+    </div>
+  </section>
+
+  <main class="paper bg-creme">
+
+    <!-- ═════════════ 2. MENSAGEM PRINCIPAL ═════════════ -->
+    <section class="mx-auto max-w-3xl px-6 pb-12" aria-labelledby="msg-title">
+      <div class="relative rounded-3xl bg-white stitch px-6 sm:px-12 py-10 text-center shadow-sm">
+        <span class="absolute -top-5 right-4 sm:right-10 rotate-6 bg-sol text-vinho font-script text-sm sm:text-base px-4 py-2 rounded-full shadow-md leading-tight">
+          Boa ideia é<br />celebrar a vida!
+        </span>
+
+        <h2 id="msg-title" class="font-script text-3xl sm:text-4xl text-rubi">O grande dia está chegando!</h2>
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed">
+          Para que seja possível receber a todos da melhor maneira e com muito preparo,
+          gostaríamos de confirmar sua presença até o dia
+          <strong class="whitespace-nowrap bg-sol/70 px-2 py-0.5 rounded-md">30 de outubro</strong>.
+        </p>
+
+        <!-- Aviso dinâmico sobre o prazo -->
+        <p id="deadline-note" class="mt-4 text-sm uppercase tracking-widest text-vinho/70"></p>
+
+        <a href="#rsvp" class="btn-shine inline-block mt-7 rounded-full bg-vinho text-creme font-serif font-semibold px-8 py-3 hover:bg-rubi transition-colors">
+          Confirmar presença
+        </a>
+      </div>
+    </section>
+
+    <!-- ═════════════ 3. FORMULÁRIO DE RSVP ═════════════ -->
+    <section id="rsvp" class="mx-auto max-w-2xl px-6 pb-14 scroll-mt-6" aria-labelledby="rsvp-title">
+      <div class="rounded-3xl bg-white shadow-xl shadow-vinho/10 border border-vinho/10 overflow-hidden">
+        <div class="bg-vinho text-creme px-6 py-6 text-center">
+          <h2 id="rsvp-title" class="font-serif text-2xl sm:text-3xl font-semibold">Confirme sua presença</h2>
+          <p class="text-creme/80 text-sm mt-1">Leva menos de um minuto 🥂</p>
+        </div>
+
+        <!-- Formulário -->
+        <form id="rsvp-form" class="px-6 sm:px-10 py-8 space-y-7" novalidate>
+          <!-- Honeypot anti-spam (invisível para pessoas) -->
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+          <!-- Nome -->
+          <div>
+            <label for="nome" class="block font-serif font-semibold mb-2">Seu nome <span class="text-rubi" aria-hidden="true">*</span></label>
+            <input id="nome" name="nome" type="text" class="field" placeholder="Digite seu nome" autocomplete="given-name" required aria-required="true" />
+            <p class="err hidden text-sm text-rubi mt-1.5" data-for="nome">Por favor, informe seu nome.</p>
+          </div>
+
+          <!-- Presença -->
+          <fieldset>
+            <legend class="font-serif font-semibold mb-3">Você vai comparecer? <span class="text-rubi" aria-hidden="true">*</span></legend>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <label class="choice cursor-pointer">
+                <input type="radio" name="presenca" value="sim" class="sr-only" required />
+                <span class="choice-body flex items-center justify-center text-center h-full rounded-2xl border-2 border-vinho/25 px-4 py-4 font-medium transition-all duration-200 hover:border-vinho/60">
+                  Sim, estarei lá! 🎉
+                </span>
+              </label>
+              <label class="choice cursor-pointer">
+                <input type="radio" name="presenca" value="nao" class="sr-only" />
+                <span class="choice-body flex items-center justify-center text-center h-full rounded-2xl border-2 border-vinho/25 px-4 py-4 font-medium transition-all duration-200 hover:border-vinho/60">
+                  Infelizmente não poderei comparecer 😢
+                </span>
+              </label>
+            </div>
+            <p class="err hidden text-sm text-rubi mt-1.5" data-for="presenca">Escolha uma das opções para continuar.</p>
+          </fieldset>
+
+          <!-- Campos que só aparecem se a resposta for "Sim" -->
+          <div id="yes-only" class="hidden space-y-7">
+            <!-- Acompanhantes -->
+            <fieldset>
+              <legend class="font-serif font-semibold mb-3">Vai acompanhado(a)?</legend>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="choice cursor-pointer">
+                  <input type="radio" name="acompanhado" value="nao" class="sr-only" checked />
+                  <span class="choice-body flex items-center justify-center text-center h-full rounded-2xl border-2 border-vinho/25 px-4 py-3 font-medium transition-all duration-200 hover:border-vinho/60">Vou sozinho(a)</span>
+                </label>
+                <label class="choice cursor-pointer">
+                  <input type="radio" name="acompanhado" value="sim" class="sr-only" />
+                  <span class="choice-body flex items-center justify-center text-center h-full rounded-2xl border-2 border-vinho/25 px-4 py-3 font-medium transition-all duration-200 hover:border-vinho/60">Sim, acompanhado(a)</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Só aparece se for acompanhado: cursor de quantidade + um campo de nome por pessoa -->
+            <div id="companions-wrap" class="hidden space-y-5">
+              <div>
+                <span id="companions-label" class="block font-serif font-semibold">Quantas pessoas vão com você? <span class="text-rubi" aria-hidden="true">*</span></span>
+                <p class="text-sm text-vinho/70 mb-3">Sem contar com você.</p>
+                <!-- Segmentador 1..15 (botões gerados pelo JavaScript) -->
+                <div id="companions-seg" class="grid grid-cols-5 sm:grid-cols-8 gap-2" role="radiogroup" aria-labelledby="companions-label"></div>
+                <p id="qtd-err" class="hidden text-sm text-rubi mt-2">Escolha quantas pessoas vão com você.</p>
+              </div>
+
+              <div id="companion-names" class="space-y-3"></div>
+              <p id="comp-err" class="hidden text-sm text-rubi">Informe o nome de cada acompanhante.</p>
+            </div>
+            <input type="hidden" name="acompanhantes" id="acompanhantes" value="0" />
+          </div>
+
+          <!-- Mensagem para a aniversariante (aparece sempre) -->
+          <div id="msg-wrap" class="hidden">
+            <label for="recado" class="block font-serif font-semibold mb-2">Deixe um recado carinhoso <span class="font-normal text-vinho/60">(opcional)</span></label>
+            <textarea id="recado" name="recado" rows="2" class="field resize-none" placeholder="Um abraço, uma frase, um desejo…"></textarea>
+          </div>
+
+          <p id="form-error" class="hidden text-sm text-rubi bg-rubi/10 rounded-xl px-4 py-3" role="alert"></p>
+
+          <!-- ═════════════ 5. BOTÃO DE ENVIO ═════════════ -->
+          <button id="submit-btn" type="submit"
+            class="btn-shine w-full flex items-center justify-center gap-3 rounded-full bg-rubi text-white font-serif font-semibold text-lg py-4 shadow-lg shadow-rubi/30 hover:bg-vinho active:scale-[.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg id="spinner" class="hidden w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity=".3" stroke-width="4"/>
+              <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <span id="submit-label">Enviar confirmação</span>
+          </button>
+          <p id="submit-hint" class="text-center text-sm text-vinho/70 -mt-3">Preencha os campos obrigatórios (<span class="text-rubi">*</span>) para poder enviar.</p>
+        </form>
+
+        <!-- Tela de sucesso -->
+        <div id="success" class="hidden px-6 sm:px-10 py-12 text-center" role="status" aria-live="polite">
+          <svg class="mx-auto w-24 h-24" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+            <circle class="check-circle" cx="26" cy="26" r="25" stroke="#D62F3F" stroke-width="2"/>
+            <path class="check-mark" d="M14 27l8 8 16-17" stroke="#D62F3F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 id="success-title" class="font-script text-4xl text-rubi mt-5"></h3>
+          <p id="success-text" class="mt-3 text-lg leading-relaxed"></p>
+
+          <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <button id="add-cal" type="button" class="hidden btn-shine rounded-full bg-vinho text-creme font-serif font-semibold px-6 py-3 hover:bg-rubi transition-colors">📅 Adicionar à agenda</button>
+            <a id="wpp-link" href="#" target="_blank" rel="noopener" class="hidden rounded-full border-2 border-vinho text-vinho font-serif font-semibold px-6 py-3 hover:bg-vinho hover:text-creme transition-colors">💬 Avisar pelo WhatsApp</a>
+          </div>
+          <button id="edit-again" type="button" class="mt-6 text-sm underline underline-offset-4 text-vinho/70 hover:text-rubi">Preciso alterar minha resposta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ 4. INFORMAÇÕES DE APOIO ═════════════ -->
+    <section id="info" class="mx-auto max-w-2xl px-6 pb-20" aria-labelledby="info-title">
+      <h2 id="info-title" class="sr-only">Informações do evento</h2>
+
+      <div class="stitch rounded-3xl bg-white px-6 sm:px-10 py-8 sm:py-10">
+        <ul class="divide-y divide-vinho/15">
+          <li class="flex items-center gap-5 py-5">
+            <svg class="w-12 h-12 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5A0F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-vinho/60">Data</p>
+              <p class="font-serif text-2xl sm:text-3xl font-semibold">21 de Novembro</p>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-5 py-5">
+            <svg class="w-12 h-12 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5A0F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5.5l3.5 2"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-vinho/60">Horário</p>
+              <p class="font-serif text-2xl sm:text-3xl font-semibold">19h</p>
+            </div>
+          </li>
+
+          <li class="flex items-start gap-5 py-5">
+            <svg class="w-12 h-12 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5A0F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-vinho/60">Local</p>
+              <p class="font-serif text-xl sm:text-2xl font-semibold leading-snug">Rua Paquetá, nº 980<br />Bairro Granjas Primavera</p>
+
+              <!-- ✏️ SUBSTITUA: link do Google Maps (ou Waze). Hoje busca pelo endereço; adicione a cidade para ficar preciso. -->
+              <a id="map-link" href="https://www.google.com/maps/search/?api=1&query=Rua+Paquet%C3%A1+980+Granjas+Primavera"
+                 target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 mt-3 rounded-full bg-sol px-5 py-2 text-sm font-semibold text-vinho hover:bg-ouro hover:text-white transition-colors">
+                🗺️ Ver no mapa
+              </a>
+
+              <!-- ✏️ OPCIONAL: cole aqui o iframe do Google Maps (Compartilhar > Incorporar um mapa) -->
+              <div class="mt-4 rounded-2xl border-2 border-dashed border-vinho/25 bg-creme h-40 hidden items-center justify-center text-sm text-vinho/60" id="map-embed-placeholder">
+                [ espaço para o mapa incorporado ]
+              </div>
+            </div>
+          </li>
+
+          <li class="relative flex items-center gap-5 py-5">
+            <svg class="w-12 h-12 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5A0F1C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4a1.8 1.8 0 1 1 1.8 1.8c-.9.3-1.8.9-1.8 2"/><path d="M12 8 3 15h5l1 6h6l1-6h5z"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-vinho/60">Traje</p>
+              <div class="flex items-center gap-2">
+                <p class="font-serif text-2xl sm:text-3xl font-semibold">Esporte fino</p>
+                <!-- Botão "?" que abre a explicação (funciona com toque, mouse e teclado) -->
+                <button type="button" id="dress-btn" aria-expanded="false" aria-controls="dress-tip" aria-label="O que é esporte fino?"
+                  class="w-6 h-6 shrink-0 rounded-full border-2 border-vinho/60 text-xs font-bold leading-none hover:bg-vinho hover:text-creme focus-visible:outline focus-visible:outline-2 focus-visible:outline-rubi transition-colors">?</button>
+              </div>
+            </div>
+
+            <!-- Explicação do traje -->
+            <div id="dress-tip" role="tooltip" class="hidden absolute z-20 left-0 right-0 top-full -mt-1 rounded-2xl bg-vinho text-creme p-4 text-sm leading-relaxed shadow-xl">
+              <p class="font-semibold mb-2">Esporte fino: elegante, mas sem gravata.</p>
+              <ul class="space-y-1.5">
+                <li><strong>Vale:</strong>
+                  <ul class="mt-1 space-y-0.5 pl-5 list-disc">
+                    <li>Calça social, de alfaiataria ou jeans</li>
+                    <li>Camisa, polo, blusa, vestido ou saia</li>
+                    <li>Sapato fechado ou calçado elegante</li>
+                    <li>Blazer é opcional</li>
+                  </ul>
+                </li>
+                <li><strong>Evite:</strong> chinelo, camiseta estampada e roupa esportiva.</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-vinho text-creme/80 text-center py-8 px-6 text-sm">
+    <p class="font-script text-2xl text-sol">Boa ideia é celebrar a vida!</p>
+    <p class="mt-2">Dionízia Queiroz · 51 anos · 21/11</p>
+  </footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ⚙️  CONFIGURAÇÕES — edite aqui
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  // Data/hora da festa (fuso de Brasília, UTC-3)
+  eventStart: '2026-11-21T19:00:00-03:00',
+  // ✏️ Horário de término (usado só no "Adicionar à agenda"). Ajuste se souber.
+  eventEnd:   '2026-11-21T23:59:00-03:00',
+  // Prazo para confirmar (fim do dia 30/10)
+  rsvpDeadline: '2026-10-30T23:59:59-03:00',
+
+  eventTitle: 'Aniversário de 51 anos da Dionízia Queiroz',
+  eventLocation: 'Rua Paquetá, 980 - Granjas Primavera',
+
+  // ✏️ COLE AQUI a URL do aplicativo da Web do Google Apps Script (termina em /exec).
+  //    Passo a passo no arquivo apps-script-rsvp.gs. Outras opções:
+  //   • Google Apps Script (Web App) gravando em uma planilha
+  //   • Formspree  → https://formspree.io/f/SEU_ID
+  //   • Make / Zapier / n8n webhook
+  // Deixe vazio ('') para testar: a resposta fica só no navegador e o sucesso é simulado.
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbw56T956FrF6AQAAHQwuuUqTEhz3tJRI1J8iVBI32CAnXF8LKGrshyvIHp7fS-DByov/exec',
+
+  // ✏️ WhatsApp de quem organiza (DDI+DDD+número, só dígitos). Vazio = esconde o botão.
+  whatsapp: '', // ex.: '5531999999999'
+
+  maxCompanions: 15,
+};
+
+/* ═══════════ CONTAGEM REGRESSIVA ═══════════ */
+const $ = (id) => document.getElementById(id);
+const pad = (n) => String(n).padStart(2, '0');
+
+function tick() {
+  const diff = new Date(CONFIG.eventStart) - new Date();
+  if (diff <= 0) {
+    $('countdown').classList.add('hidden');
+    $('cd-done').classList.remove('hidden');
+    $('cd-done').textContent = 'O grande dia chegou! 🥂';
+    return;
+  }
+  const s = Math.floor(diff / 1000);
+  $('cd-d').textContent = Math.floor(s / 86400);
+  $('cd-h').textContent = pad(Math.floor((s % 86400) / 3600));
+  $('cd-m').textContent = pad(Math.floor((s % 3600) / 60));
+  $('cd-s').textContent = pad(s % 60);
+}
+tick(); setInterval(tick, 1000);
+
+/* Aviso sobre o prazo de confirmação */
+(function deadlineNote() {
+  const left = new Date(CONFIG.rsvpDeadline) - new Date();
+  const days = Math.ceil(left / 86400000);
+  const el = $('deadline-note');
+  if (left < 0) el.textContent = 'O prazo terminou, mas você ainda pode avisar pelo formulário 💛';
+  else if (days <= 1) el.textContent = 'Último dia para confirmar!';
+  else el.textContent = `Faltam ${days} dias para o prazo de confirmação`;
+})();
+
+/* ═══════════ FORMULÁRIO ═══════════ */
+const form = $('rsvp-form');
+const yesOnly = $('yes-only');
+const msgWrap = $('msg-wrap');
+let companions = 0;
+
+// Segmentador de quantidade (1 até CONFIG.maxCompanions)
+const seg = $('companions-seg');
+for (let i = 1; i <= CONFIG.maxCompanions; i++) {
+  seg.insertAdjacentHTML('beforeend',
+    `<label class="choice cursor-pointer">
+       <input type="radio" name="qtd" value="${i}" class="sr-only" />
+       <span class="choice-body flex items-center justify-center rounded-xl border-2 border-vinho/25 py-2.5 font-serif font-bold text-lg transition-all duration-200 hover:border-vinho/60">${i}</span>
+     </label>`);
+}
+const setQtdRadio = (n) =>
+  form.querySelectorAll('input[name="qtd"]').forEach((r) => { r.checked = Number(r.value) === n; });
+seg.addEventListener('change', (e) => {
+  if (e.target.name === 'qtd') { setCompanions(Number(e.target.value)); $('qtd-err').classList.add('hidden'); }
+});
+
+// Lê os nomes digitados (ignora vazios)
+const companionNames = () =>
+  [...document.querySelectorAll('#companion-names input')].map((i) => i.value.trim()).filter(Boolean);
+
+// Cria/remove campos de nome conforme o número escolhido, preservando o que já foi digitado
+function renderCompanionNames() {
+  const box = $('companion-names');
+  const old = [...box.querySelectorAll('input')].map((i) => i.value);
+  box.innerHTML = '';
+  for (let i = 0; i < companions; i++) {
+    const wrap = document.createElement('div');
+    const lab = document.createElement('label');
+    lab.htmlFor = 'comp-' + i;
+    lab.className = 'block text-sm font-semibold mb-1';
+    lab.textContent = `Nome do acompanhante ${i + 1}`;
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.id = 'comp-' + i; inp.className = 'field';
+    inp.placeholder = 'Nome'; inp.autocomplete = 'off'; inp.value = old[i] || '';
+    inp.addEventListener('input', () => { inp.classList.remove('invalid'); $('comp-err').classList.add('hidden'); });
+    wrap.append(lab, inp);
+    box.append(wrap);
+  }
+}
+
+function setCompanions(n) {
+  companions = Math.max(0, Math.min(CONFIG.maxCompanions, n));
+  $('acompanhantes').value = companions;
+  renderCompanionNames();
+}
+
+function resetCompanions() {
+  form.querySelector('input[name="acompanhado"][value="nao"]').checked = true;
+  $('companions-wrap').classList.add('hidden');
+  $('comp-err').classList.add('hidden');
+  $('qtd-err').classList.add('hidden');
+  setQtdRadio(0);
+  setCompanions(0);
+}
+
+// "Vai acompanhado(a)?"
+form.querySelectorAll('input[name="acompanhado"]').forEach((r) =>
+  r.addEventListener('change', () => {
+    const com = r.value === 'sim' && r.checked;
+    $('companions-wrap').classList.toggle('hidden', !com);
+    setQtdRadio(0);
+    setCompanions(0);
+    $('qtd-err').classList.add('hidden');
+  })
+);
+
+// Mostra/oculta campos conforme a resposta de presença
+form.querySelectorAll('input[name="presenca"]').forEach((r) =>
+  r.addEventListener('change', () => {
+    const yes = r.value === 'sim' && r.checked;
+    yesOnly.classList.toggle('hidden', !yes);
+    msgWrap.classList.remove('hidden');
+    if (!yes) resetCompanions();
+    showError('presenca', false);
+  })
+);
+
+function showError(name, on) {
+  const msg = form.querySelector(`.err[data-for="${name}"]`);
+  if (msg) msg.classList.toggle('hidden', !on);
+  const input = form.querySelector(`[name="${name}"]`);
+  if (input && input.classList) input.classList.toggle('invalid', on);
+}
+$('nome').addEventListener('input', () => showError('nome', false));
+
+function validate() {
+  let ok = true;
+  const nome = $('nome').value.trim();
+  const nomeOk = nome.length >= 2; // basta o nome
+  showError('nome', !nomeOk); if (!nomeOk) ok = false;
+
+  const presenca = form.querySelector('input[name="presenca"]:checked');
+  showError('presenca', !presenca); if (!presenca) ok = false;
+
+  // Se vai acompanhado: precisa escolher o número e preencher o nome de cada pessoa
+  const comAcomp = form.querySelector('input[name="acompanhado"]:checked')?.value === 'sim';
+  let qtdOk = true, compOk = true;
+  if (presenca && presenca.value === 'sim' && comAcomp) {
+    qtdOk = companions > 0;
+    $('qtd-err').classList.toggle('hidden', qtdOk);
+    if (qtdOk) {
+      document.querySelectorAll('#companion-names input').forEach((i) => {
+        const bad = !i.value.trim();
+        i.classList.toggle('invalid', bad);
+        if (bad) compOk = false;
+      });
+    }
+    $('comp-err').classList.toggle('hidden', compOk);
+    if (!qtdOk || !compOk) ok = false;
+  }
+
+  if (!ok) {
+    const first = !nomeOk ? $('nome') : (!presenca ? form.querySelector('fieldset') : (!qtdOk ? $('companions-seg') : $('companion-names')));
+    first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!nomeOk) $('nome').focus({ preventScroll: true });
+  }
+  return ok;
+}
+
+// Verificação silenciosa: o botão só libera quando os campos obrigatórios estão completos
+function isValid() {
+  if ($('nome').value.trim().length < 2) return false;
+  const p = form.querySelector('input[name="presenca"]:checked');
+  if (!p) return false;
+  if (p.value === 'sim' && form.querySelector('input[name="acompanhado"]:checked')?.value === 'sim') {
+    if (companions < 1) return false;
+    const inputs = [...document.querySelectorAll('#companion-names input')];
+    if (inputs.length !== companions || inputs.some((i) => !i.value.trim())) return false;
+  }
+  return true;
+}
+function refreshSubmit() {
+  const btn = $('submit-btn');
+  if (btn.dataset.sending === '1') return;
+  const ok = isValid();
+  btn.disabled = !ok;
+  $('submit-hint').classList.toggle('hidden', ok);
+}
+form.addEventListener('input', refreshSubmit);
+form.addEventListener('change', refreshSubmit);
+refreshSubmit();
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('form-error').classList.add('hidden');
+  if (form.website.value) return;           // honeypot: robô
+  if (!validate()) return;
+
+  const data = {
+    nome: $('nome').value.trim(),
+    presenca: form.presenca.value,
+    acompanhantes: form.presenca.value === 'sim' ? companions : 0,
+    nomes_acompanhantes: form.presenca.value === 'sim' ? companionNames().join(', ') : '',
+    recado: $('recado').value.trim(),
+    enviado_em: new Date().toISOString(),
+  };
+
+  // Estado "enviando"
+  const btn = $('submit-btn');
+  btn.dataset.sending = '1';
+  btn.disabled = true;
+  $('spinner').classList.remove('hidden');
+  $('submit-label').textContent = 'Enviando…';
+
+  try {
+    if (CONFIG.formEndpoint) {
+      // Google Apps Script responde com redirecionamento; em "no-cors" a resposta é opaca
+      // (não dá para lê-la), então consideramos sucesso quando a requisição sai sem erro de rede.
+      // text/plain evita o preflight CORS.
+      await fetch(CONFIG.formEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data),
+      });
+    } else {
+      await new Promise((r) => setTimeout(r, 900)); // simulação
+      console.info('[RSVP – modo teste] Dados que seriam enviados:', data);
+    }
+    try { localStorage.setItem('rsvp-dionizia', JSON.stringify(data)); } catch (_) {}
+    showSuccess(data);
+  } catch (err) {
+    console.error(err);
+    const box = $('form-error');
+    box.textContent = 'Ops! Não conseguimos enviar agora. Tente novamente em instantes ou avise pelo WhatsApp.';
+    box.classList.remove('hidden');
+    btn.dataset.sending = '';
+    refreshSubmit();
+    $('spinner').classList.add('hidden');
+    $('submit-label').textContent = 'Tentar novamente';
+  }
+});
+
+/* ═══════════ SUCESSO ═══════════ */
+function showSuccess(data) {
+  const yes = data.presenca === 'sim';
+  const primeiro = data.nome.split(' ')[0];
+
+  $('success-title').textContent = yes ? `Que alegria, ${primeiro}!` : `Sentiremos sua falta, ${primeiro}`;
+  $('success-text').textContent = yes
+    ? `Sua presença está confirmada${data.acompanhantes ? ` com ${data.acompanhantes} acompanhante${data.acompanhantes > 1 ? 's' : ''}` : ''}. Dia 21 de novembro, às 19h. Vai ser uma noite inesquecível! 🥂`
+    : 'Obrigado por avisar. Receba um abraço apertado e, quem sabe, nos vemos na próxima comemoração! 💛';
+
+  $('add-cal').classList.toggle('hidden', !yes);
+
+  if (CONFIG.whatsapp) {
+    const txt = yes
+      ? `Olá! Aqui é ${data.nome}. Confirmei presença no aniversário da Dionízia${data.acompanhantes ? ` com ${data.acompanhantes} acompanhante(s)` : ''}. 🎉`
+      : `Olá! Aqui é ${data.nome}. Infelizmente não poderei comparecer ao aniversário da Dionízia. Um grande abraço! 💛`;
+    $('wpp-link').href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt)}`;
+    $('wpp-link').classList.remove('hidden');
+  }
+
+  form.classList.add('hidden');
+  $('success').classList.remove('hidden');
+  $('rsvp').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (yes) launchConfetti();
+}
+
+// Permite reenviar/alterar
+$('edit-again').addEventListener('click', () => {
+  $('success').classList.add('hidden');
+  form.classList.remove('hidden');
+  $('submit-btn').dataset.sending = '';
+  refreshSubmit();
+  $('spinner').classList.add('hidden');
+  $('submit-label').textContent = 'Atualizar confirmação';
+});
+
+/* ═══════════ ADICIONAR À AGENDA (.ics) ═══════════ */
+$('add-cal').addEventListener('click', () => {
+  const fmt = (iso) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//RSVP Dionizia//PT-BR', 'BEGIN:VEVENT',
+    `UID:dionizia51-${Date.now()}@rsvp`,
+    `DTSTAMP:${fmt(new Date().toISOString())}`,
+    `DTSTART:${fmt(CONFIG.eventStart)}`,
+    `DTEND:${fmt(CONFIG.eventEnd)}`,
+    `SUMMARY:${CONFIG.eventTitle}`,
+    `LOCATION:${CONFIG.eventLocation}`,
+    'DESCRIPTION:Traje esporte fino. Boa ideia é celebrar a vida!',
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = 'aniversario-dionizia.ics';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+/* ═══════════ CONFETE (canvas, sem bibliotecas) ═══════════ */
+function launchConfetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('confetti'), ctx = c.getContext('2d');
+  const resize = () => { c.width = innerWidth; c.height = innerHeight; };
+  resize();
+  const colors = ['#F5C842', '#D62F3F', '#5A0F1C', '#C79A3B', '#FFFBF0'];
+  const parts = Array.from({ length: 140 }, () => ({
+    x: Math.random() * c.width, y: -20 - Math.random() * c.height * .5,
+    w: 6 + Math.random() * 7, h: 8 + Math.random() * 10,
+    vx: -1.5 + Math.random() * 3, vy: 2 + Math.random() * 4,
+    rot: Math.random() * 6.28, vr: -.2 + Math.random() * .4,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  }));
+  const end = performance.now() + 4000;
+  (function frame(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    parts.forEach((p) => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (t < end) requestAnimationFrame(frame); else ctx.clearRect(0, 0, c.width, c.height);
+  })(performance.now());
+}
+
+/* ═══════════ TOOLTIP DO TRAJE ═══════════ */
+(function () {
+  const btn = $('dress-btn'), tip = $('dress-tip');
+  let pinned = false;
+  const show = () => { tip.classList.remove('hidden'); btn.setAttribute('aria-expanded', 'true'); };
+  const hide = () => { tip.classList.add('hidden'); btn.setAttribute('aria-expanded', 'false'); pinned = false; };
+  btn.addEventListener('click', (e) => { e.stopPropagation(); pinned ? hide() : (pinned = true, show()); });
+  // Com mouse: abre ao passar por cima (no toque, só pelo clique)
+  btn.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') show(); });
+  btn.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !pinned) hide(); });
+  document.addEventListener('click', (e) => { if (!tip.contains(e.target)) hide(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+})();
+</script>
+</body>
+</html>
